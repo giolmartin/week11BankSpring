@@ -5,6 +5,7 @@ import java.util.*;
 public class MeritBank {
 
 	private static List<AccountHolder> accounts = new ArrayList<AccountHolder>();
+	private static  long accountNumber = 1;
 	
 	public static  void addAccountHolder(AccountHolder accountHolder) 
 	{
@@ -15,5 +16,16 @@ public class MeritBank {
 	{
 		return accounts;
 	}
+	public static int getAccountLength() {
+		return accounts.size();
+	}
+	
+	public  static long getNextAccountNumber() 
+	{
+		return accountNumber++ ;
+	}
+
+	
+	
 	
 }
