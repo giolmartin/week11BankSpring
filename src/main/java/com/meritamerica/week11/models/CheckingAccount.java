@@ -9,18 +9,18 @@ import com.meritamerica.week11.exceptions.NoSuchResourceFoundException;
 public class CheckingAccount extends BankAccount{
 	
 	
-	private static double interestRate = .0001;
+	private static final double INTEREST_RATE = .0001;
 	
 	
 	
 	
 	public CheckingAccount(double balance)   {
-		super(balance, .0001);
+		super(balance, INTEREST_RATE);
 		
 		
 	}
 	 public CheckingAccount()  {
-		 super(0.0001);
+		 super(INTEREST_RATE);
 		 }
 	
 	

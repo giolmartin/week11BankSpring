@@ -49,19 +49,45 @@ public class MeritBankController {
 	
 	@PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody CheckingAccount checkingAccount ) throws NoSuchResourceFoundException{
+	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody CheckingAccount checkingAccount) 
+												throws NoSuchResourceFoundException{
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
-		if (checkingAccount.getBalance() < 0 ) {
-			
-		}
-		
 		MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
-		return checkingAccount;
+		return checkingAccount;	
+	}
+	
+	@PostMapping(value = "/AccountHolder/{id}/SavingsAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
+	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody SavingsAccount savingsAccount )
+										throws NoSuchResourceFoundException{
+		if( id > MeritBank.getAccountLength() ) {
+			log.warn("Invalid ID");
+			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		MeritBank.getAccountHolders().get(id-1).addSavingsAccount(savingsAccount);
+		return savingsAccount;	
+	}
+	
+	@GetMapping(value = "/CDOfferings")
+	public List<CDOffering> getCDOffering() {
+		log.info("Returned account holders");
+		return MeritBank.getCdOfferings();
 		
 	}
+	
+	@PostMapping(value = "/CDOfferings")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CDOffering addCDOffering(@RequestBody CDOffering cdOffering) {
+		MeritBank.addCDOffering(cdOffering);
+		log.info("cdOffering created and added");
+		return cdOffering;
+	}
+	
+	
+	
 	
 	
 	

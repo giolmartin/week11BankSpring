@@ -1,9 +1,15 @@
 package com.meritamerica.week11.models;
 
-public class SavingsAccount {
+public class SavingsAccount extends BankAccount {
 
-	private double balance;
+	private static final double INTEREST_RATE = 0.001 ;
+	
+	public SavingsAccount() {
+		super(INTEREST_RATE);
+	}
+	
 	public SavingsAccount(double balance) {
-		this.balance = balance;	}
+		super(INTEREST_RATE);
+		}
 
 }

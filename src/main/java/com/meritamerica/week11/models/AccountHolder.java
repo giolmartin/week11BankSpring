@@ -32,6 +32,7 @@ public class AccountHolder {
 	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
 	private List<CDAccount> cdAccounts = new ArrayList<CDAccount>();
 
+	
 
 	
 	public AccountHolder() {
@@ -112,8 +113,33 @@ public class AccountHolder {
 	public List<CDAccount> getCdAccounts() {
 		return cdAccounts;
 	}
+	
+	
+	public double getCombinedBalance() 
+	{
+		double combinedBalance	= getCheckingBalance()+ getSavingsBalance();
+		return combinedBalance;
+	}
 
-
-
+	public double getCheckingBalance() {
+		double checkingBalance = 0;
+		for(CheckingAccount cB : checkingAccounts) {
+			checkingBalance += cB.getBalance();
+		}
+		return checkingBalance;
+	}
+	
+	public double getSavingsBalance() {
+		double savingsBalance = 0;
+		for(SavingsAccount sB: savingsAccounts) {
+			savingsBalance += sB.getBalance();
+		}
+		return savingsBalance;
+	}
+	
+	public CDOffering addCDOfferings(double interestRate, int term) {
+		
+		return cdOffering;
+	}
 
 }
