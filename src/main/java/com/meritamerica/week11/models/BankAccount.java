@@ -20,7 +20,7 @@ public abstract class BankAccount  {
 	public BankAccount(double interestRate) {
 	//changed this and Calling the meritAmerica.getNextAccountNumber on the getter, see line 70
 		//now account numbers appear sequential on postman even after entering a negative number
-		this.accountNumber = accountNumber;
+		this.accountNumber = MeritBank.getNextAccountNumber();
 		
 		
 		this.balance = 0;
@@ -69,7 +69,7 @@ public abstract class BankAccount  {
 		this.interestRate = interestRate;
 	}
 	public long getAccountNumber() {
-		return MeritBank.getNextAccountNumber();
+		return accountNumber;
 	}
 	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
