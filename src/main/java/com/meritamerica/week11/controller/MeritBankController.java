@@ -47,7 +47,7 @@ public class MeritBankController {
 		return MeritBank.getAccountHolders().get(id-1);
 	}
 	
-	@PostMapping(value = "/AccountHolders/{id}/CheckingAccounts")
+	@PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody CheckingAccount checkingAccount ) throws NoSuchResourceFoundException{
 		if( id > MeritBank.getAccountLength() ) {
@@ -55,7 +55,7 @@ public class MeritBankController {
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
 		//CheckingAccount acc = new CheckingAccount(b);
-		MeritBank.getAccountHolders().get(id-1).addCheckingAccount();
+		MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
 		return checkingAccount;
 		
 	}
