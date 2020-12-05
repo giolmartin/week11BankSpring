@@ -13,9 +13,13 @@ public class CheckingAccount extends BankAccount{
 	
 	
 	public CheckingAccount(double balance) {
-		super(MeritBank.getNextAccountNumber(), balance , interestRate);
+		super(balance, .0001);
+		
 		
 	}
+	 public CheckingAccount() {
+		 super(0.0001);
+		 }
 	
 	
 

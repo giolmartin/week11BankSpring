@@ -54,7 +54,7 @@ public class MeritBankController {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
-		//CheckingAccount acc = new CheckingAccount(b);
+		
 		MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
 		return checkingAccount;
 		

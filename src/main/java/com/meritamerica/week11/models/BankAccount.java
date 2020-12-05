@@ -1,10 +1,20 @@
 package com.meritamerica.week11.models;
 
+
+
+
 public abstract class BankAccount {
 	private double balance;
 	private double interestRate;
 	private long accountNumber;
 	private String date = "01/02/2020";
+	
+	public BankAccount(double interestRate) {
+		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.balance = 0;
+		this.interestRate=interestRate;
+		date= "01/02/2020";
+	}
 	
 	BankAccount(double balance, double interestRate){
 		this.balance = balance;
@@ -17,12 +27,14 @@ public abstract class BankAccount {
 		 this.balance = balance;
 		 this.interestRate = interestRate;
 	 }
+	
 	BankAccount(long accountNumber, double balance, double interestRate, String date){
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 		this.interestRate = interestRate;
 		this.date= date;
 	}
+	
 	public double getBalance() {
 		return balance;
 	}
