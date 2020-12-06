@@ -1,13 +1,17 @@
 package com.meritamerica.week11.models;
 
-import javax.validation.constraints.NotBlank;
+
+import javax.validation.constraints.*;
 
 public class CDOffering {
 
-	@NotBlank(message = "Term of investment Missing")
+	@NotNull(message = "Term of investment Missing")
+	@Min(value = 1)
 	private int term;
 	
-	@NotBlank(message = "Interest Rate Missing")
+	@NotNull(message = "Interest Rate Missing")
+	@Min(value = 0L)
+	@Max(value = 1)
 	private double interestRate;
 	
 	public  CDOffering() {

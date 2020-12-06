@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 
 public class AccountHolder {
 
-
+	private static final long  MAX_COMBINED_AMOUNT= 250000;
 	private static int nextId = 1;
 	private int id;
 
@@ -32,16 +32,17 @@ public class AccountHolder {
 	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
 	private List<CDAccount> cdAccounts = new ArrayList<CDAccount>();
 	
-	@Min(value = 0L, message = "Cant be lower than 0")
-	private double balance;
+	private  int numberOfCheckingAccounts ;
+	private double checkingBalance;
+	private  int numberOfSavingsAccounts;
+	private double savingsBalance;
+	private  int numberOfCDAccounts ;
+	private double cdBalance;
 	
 	@Min(value = 0L) 
-	@Max(value = 250000)
+	@Max(value = MAX_COMBINED_AMOUNT, message = "Over 250k")
 	double combinedBalance;
 
-	
-
-	
 	public AccountHolder() {
 		this.id = nextId++;
 		this.firstName = "";
@@ -91,13 +92,14 @@ public class AccountHolder {
 	}
 
 	public CheckingAccount addCheckingAccount(double balance) {
-		this.balance = balance;
-		CheckingAccount checkingAccount = new CheckingAccount(this.balance);
+	
+		CheckingAccount checkingAccount = new CheckingAccount(balance);
 		return checkingAccount;
 	}
 
 	public void addCheckingAccount(CheckingAccount checkingAccount) {
 		checkingAccounts.add(checkingAccount);
+		
 	}
 
 	public List<CheckingAccount> getCheckingAccounts() {
@@ -111,11 +113,15 @@ public class AccountHolder {
 
 	public void addSavingsAccount(SavingsAccount savingsAccount) {
 		savingsAccounts.add(savingsAccount);
+		
 	}
 	public List<SavingsAccount> getSavingsAccounts() {
 		return savingsAccounts;
 	}
 	
+	public void addCDAccounts(CDAccount cdAccount) {
+		cdAccounts.add(cdAccount);
+	}
 	
 	
 	public List<CDAccount> getCdAccounts() {
@@ -125,12 +131,12 @@ public class AccountHolder {
 	
 	public double getCombinedBalance() 
 	{
-		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance();
+		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance() + getCDBalance();
 		return combinedBalance;
 	}
 
-	public double getCheckingBalance() {
-		double checkingBalance = 0;
+	public  double getCheckingBalance() {
+		checkingBalance = 0;
 		for(CheckingAccount cB : checkingAccounts) {
 			checkingBalance += cB.getBalance();
 		}
@@ -138,13 +144,32 @@ public class AccountHolder {
 	}
 	
 	public double getSavingsBalance() {
-		double savingsBalance = 0;
+		savingsBalance =0;
 		for(SavingsAccount sB: savingsAccounts) {
 			savingsBalance += sB.getBalance();
 		}
 		return savingsBalance;
 	}
+	public double getCDBalance() {
+		cdBalance = 0;
+		for(CDAccount cdA: cdAccounts) {
+			cdBalance += cdA.getBalance();
+		}
+		return cdBalance;
+	}
 	
+	public int getNumberOfCheckingAccounts() {
+		return checkingAccounts.size();
+	}
+
+	public int getNumberOfSavingsAccounts() {
+		return savingsAccounts.size();
+	}
+
+	public int getNumberOfCDAccounts() {
+		return  cdAccounts.size();
+	}
+
 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.meritamerica.week11.models.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.meritamerica.week11.exceptions.*;
 
 
@@ -49,6 +50,7 @@ public class MeritBankController {
 	
 	@PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
+	
 	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
 												throws NoSuchResourceFoundException{
 		if( id > MeritBank.getAccountLength() ) {
@@ -101,12 +103,31 @@ public class MeritBankController {
 	
 	@PostMapping(value = "/CDOfferings")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CDOffering addCDOffering(@RequestBody CDOffering cdOffering) {
+	public CDOffering addCDOffering(@RequestBody @Valid CDOffering cdOffering) {
 		MeritBank.addCDOffering(cdOffering);
 		log.info("cdOffering created and added");
 		return cdOffering;
 	}
 	
+	@PostMapping(value = "/AccountHolder/{id}/CDAccounts")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CDAccount addCDAccount(@PathVariable("id") int id, @RequestBody @Valid CDAccount cdAccount) throws NoSuchResourceFoundException {
+		if( id > MeritBank.getAccountLength() ) {
+			log.warn("Invalid ID");
+			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		MeritBank.getAccountHolders().get(id-1).addCDAccounts(cdAccount);
+		return cdAccount;
+	}
+	
+	@GetMapping(value = "/AccountHolder/{id}/CDAccounts")
+	public List<CDAccount> getCDAccounts(@PathVariable ("id") int id) throws NoSuchResourceFoundException{
+		if( id > MeritBank.getAccountLength() ) {
+			log.warn("Invalid ID");
+			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		return MeritBank.getAccountHolders().get(id-1).getCdAccounts();
+	}
 	
 	
 	

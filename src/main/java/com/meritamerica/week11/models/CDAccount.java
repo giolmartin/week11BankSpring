@@ -1,19 +1,30 @@
 package com.meritamerica.week11.models;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class CDAccount extends BankAccount{
 
-	private CDOffering cdOffering;
+	@NotNull(message = "Term of investment Missing")
+	@Min(value = 1)
 	private int term;
-	private double interestRate;
 	
 	
-	
+
 	public CDAccount() {
 		super();
 	}
-	public CDAccount(CDOffering cdOffering, double balance) {
-		super(balance, cdOffering.getInterestRate(), cdOffering.getTerm());
+	public CDAccount( double balance, double interestRate, int term) {
+		super(balance, interestRate);
+		this.term = term;
 		
+	}
+	
+	public int getTerm() {
+		return term;
+	}
+	public void setTerm(int term) {
+		this.term = term;
 	}
 	
 	

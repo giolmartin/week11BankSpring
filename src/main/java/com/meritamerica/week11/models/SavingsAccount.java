@@ -9,7 +9,9 @@ public class SavingsAccount extends BankAccount {
 	}
 	
 	public SavingsAccount(double balance) {
-		super(INTEREST_RATE);
+		super(balance,INTEREST_RATE);
 		}
 
+	
+	
 }
