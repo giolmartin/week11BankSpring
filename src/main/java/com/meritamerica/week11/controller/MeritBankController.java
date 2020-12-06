@@ -49,7 +49,7 @@ public class MeritBankController {
 	
 	@PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody CheckingAccount checkingAccount) 
+	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
 												throws NoSuchResourceFoundException{
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
@@ -59,9 +59,20 @@ public class MeritBankController {
 		return checkingAccount;	
 	}
 	
+	@GetMapping (value = "/AccountHolder/{id}/CheckingAccounts")
+	public List<CheckingAccount> getCheckingAccounts(@PathVariable("id") int id ) throws NoSuchResourceFoundException{
+		if( id > MeritBank.getAccountLength() ) {
+			log.warn("Invalid ID");
+			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		log.info("Checking Accounts returned");
+		return MeritBank.getAccountHolders().get(id-1).getCheckingAccounts();
+		
+	}
+	
 	@PostMapping(value = "/AccountHolder/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody SavingsAccount savingsAccount )
+	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody @Valid SavingsAccount savingsAccount )
 										throws NoSuchResourceFoundException{
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
@@ -69,6 +80,16 @@ public class MeritBankController {
 		}
 		MeritBank.getAccountHolders().get(id-1).addSavingsAccount(savingsAccount);
 		return savingsAccount;	
+	}
+	
+	@GetMapping(value = "/AccountHolder/{id}/SavingsAccounts")
+	public List<SavingsAccount> getSavingsAccounts(@PathVariable("id") int id) throws NoSuchResourceFoundException{
+		if( id > MeritBank.getAccountLength() ) {
+			log.warn("Invalid ID");
+			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		log.info("Savings Accounts returned");
+		return MeritBank.getAccountHolders().get(id-1).getSavingsAccounts();
 	}
 	
 	@GetMapping(value = "/CDOfferings")

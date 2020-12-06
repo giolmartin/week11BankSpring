@@ -31,6 +31,13 @@ public class AccountHolder {
 	private List<CheckingAccount> checkingAccounts = new ArrayList<CheckingAccount>();
 	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
 	private List<CDAccount> cdAccounts = new ArrayList<CDAccount>();
+	
+	@Min(value = 0L, message = "Cant be lower than 0")
+	private double balance;
+	
+	@Min(value = 0L) 
+	@Max(value = 250000)
+	double combinedBalance;
 
 	
 
@@ -84,7 +91,8 @@ public class AccountHolder {
 	}
 
 	public CheckingAccount addCheckingAccount(double balance) {
-		CheckingAccount checkingAccount = new CheckingAccount(balance);
+		this.balance = balance;
+		CheckingAccount checkingAccount = new CheckingAccount(this.balance);
 		return checkingAccount;
 	}
 
@@ -117,7 +125,7 @@ public class AccountHolder {
 	
 	public double getCombinedBalance() 
 	{
-		double combinedBalance	= getCheckingBalance()+ getSavingsBalance();
+		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance();
 		return combinedBalance;
 	}
 
@@ -137,9 +145,6 @@ public class AccountHolder {
 		return savingsBalance;
 	}
 	
-	public CDOffering addCDOfferings(double interestRate, int term) {
-		
-		return cdOffering;
-	}
+
 
 }

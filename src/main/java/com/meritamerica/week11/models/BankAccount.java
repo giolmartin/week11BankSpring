@@ -1,5 +1,6 @@
 package com.meritamerica.week11.models;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 
@@ -12,7 +13,14 @@ public abstract class BankAccount  {
 	private static final double  MAX_COMBINED_AMOUNT= 250000;
 	//private long nextAccountNumber = MeritBank.getNextAccountNumber();
 	private long accountNumber;
+	
+	@Min(value = 0L, message = "Balance Lower Than 0 Exception")
 	private double balance;
+	
+	//@Min(value = 0L) 
+	//@Max(value = 250000)
+	private double combinedBalance;
+	
 	private double interestRate;
 	private String openedOn;
 	
@@ -24,6 +32,7 @@ public abstract class BankAccount  {
 		//now account numbers appear sequential on postman even after entering a negative number
 		
 		this.accountNumber = MeritBank.getNextAccountNumber();
+		
 		this.balance = 0 ;
 		this.interestRate=interestRate;
 		openedOn = "123123141423";
@@ -63,15 +72,18 @@ public abstract class BankAccount  {
 
 //Here added the balance negative Exception that way the object isn't created. Or is it?
 	public void setBalance(double balance) throws NegativeBalanceException {
-		//double combinedBalance = MeritBank.getAccountHolders() ;
-		if(balance > 0 ) {
-			this.balance = balance;
-		} else {
-			throw new NegativeBalanceException("Negative Balance Not Accepted");
-		} 
-	
-		
+			this.balance = balance;	
+			if (balance < 0) accountNumber --;
 	}
+	
+	public double getCombinedBalance() {
+		return combinedBalance;
+	}
+	public void setCombinedBalance(double combinedBalance) {
+	;
+		this.combinedBalance = combinedBalance;
+	}
+	
 	 public double getInterestRate() {
 		return interestRate;
 	}

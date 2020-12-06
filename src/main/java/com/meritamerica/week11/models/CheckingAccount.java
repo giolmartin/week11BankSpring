@@ -2,6 +2,8 @@ package com.meritamerica.week11.models;
 
 import java.util.Date;
 
+import javax.validation.constraints.Min;
+
 import com.meritamerica.week11.exceptions.NoSuchResourceFoundException;
 
 ;
