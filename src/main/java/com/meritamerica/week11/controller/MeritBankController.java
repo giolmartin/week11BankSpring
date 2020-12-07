@@ -52,11 +52,16 @@ public class MeritBankController {
 	@ResponseStatus(HttpStatus.CREATED)
 	
 	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
-												throws NoSuchResourceFoundException{
+												throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+			log.warn("Combined Balance exceeds 250000");
+			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
+		}
+		
 		MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
 		return checkingAccount;	
 	}
@@ -75,10 +80,14 @@ public class MeritBankController {
 	@PostMapping(value = "/AccountHolder/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody @Valid SavingsAccount savingsAccount )
-										throws NoSuchResourceFoundException{
+										throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+			log.warn("Combined Balance exceeds 250000");
+			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
 		MeritBank.getAccountHolders().get(id-1).addSavingsAccount(savingsAccount);
 		return savingsAccount;	
@@ -111,10 +120,14 @@ public class MeritBankController {
 	
 	@PostMapping(value = "/AccountHolder/{id}/CDAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CDAccount addCDAccount(@PathVariable("id") int id, @RequestBody @Valid CDAccount cdAccount) throws NoSuchResourceFoundException {
+	public CDAccount addCDAccount(@PathVariable("id") int id, @RequestBody @Valid CDAccount cdAccount) throws NoSuchResourceFoundException, ExceedsCombinedLimitException {
 		if( id > MeritBank.getAccountLength() ) {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
+		}
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+			log.warn("Combined Balance exceeds 250000");
+			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
 		MeritBank.getAccountHolders().get(id-1).addCDAccounts(cdAccount);
 		return cdAccount;
