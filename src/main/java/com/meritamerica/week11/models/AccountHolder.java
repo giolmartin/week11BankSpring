@@ -40,7 +40,7 @@ public class AccountHolder {
 	private double cdBalance;
 	
 	@Min(value = 0L) 
-	@Max(value = MAX_COMBINED_AMOUNT, message = "Over 250k")
+	@Max(value = 250000, message = "Over 250k")
 	double combinedBalance;
 
 	public AccountHolder() {

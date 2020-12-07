@@ -25,7 +25,10 @@ public abstract class BankAccount  {
 	
 	private String openedOn;
 	
-	public  BankAccount() {}
+	public  BankAccount() { 
+		this.accountNumber = MeritBank.getNextAccountNumber();
+		openedOn = "1234566";
+		}
 	
 	public BankAccount(double interestRate) {
 		this.accountNumber = MeritBank.getNextAccountNumber();	
