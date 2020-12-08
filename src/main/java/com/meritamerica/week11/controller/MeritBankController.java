@@ -57,12 +57,12 @@ public class MeritBankController {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + checkingAccount.getBalance() > 250000) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
-		
-		MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
+		log.info("Checking Account created and Added");
+		 MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
 		return checkingAccount;	
 	}
 	
@@ -85,10 +85,11 @@ public class MeritBankController {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + savingsAccount.getBalance() > 250000) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
+		log.info("Savings Account created and Added");
 		MeritBank.getAccountHolders().get(id-1).addSavingsAccount(savingsAccount);
 		return savingsAccount;	
 	}
@@ -125,11 +126,13 @@ public class MeritBankController {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() > 250000) {
+		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + cdAccount.getBalance() > 250000) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
+		
 		MeritBank.getAccountHolders().get(id-1).addCDAccounts(cdAccount);
+		log.info("CDAccount created and Added");
 		return cdAccount;
 	}
 	

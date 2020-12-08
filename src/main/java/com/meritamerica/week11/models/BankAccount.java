@@ -24,7 +24,7 @@ public abstract class BankAccount  {
 	private double interestRate;
 	
 	private String openedOn;
-	
+
 	public  BankAccount() { 
 		this.accountNumber = MeritBank.getNextAccountNumber();
 		openedOn = "1234566";
@@ -51,7 +51,7 @@ public abstract class BankAccount  {
 	}
 
 //Here added the balance negative Exception that way the object isn't created. Or is it?
-	public void setBalance(double balance) throws NegativeBalanceException {
+	public void setBalance(double balance)  {
 			this.balance = balance;	
 	}
 	
