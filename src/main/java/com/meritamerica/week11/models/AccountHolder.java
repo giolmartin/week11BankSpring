@@ -129,11 +129,7 @@ public class AccountHolder {
 	}
 	
 	
-	public double getCombinedBalance() 
-	{
-		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance() + getCDBalance();
-		return combinedBalance;
-	}
+	
 
 	public  double getCheckingBalance() {
 		checkingBalance = 0;
@@ -170,6 +166,11 @@ public class AccountHolder {
 		return  cdAccounts.size();
 	}
 
+	public double getCombinedBalance() 
+	{
+		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance() + getCDBalance();
+		return combinedBalance;
+	}
 
 
 }

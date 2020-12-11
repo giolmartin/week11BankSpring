@@ -1,5 +1,7 @@
 package com.meritamerica.week11.models;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -11,16 +13,14 @@ import com.meritamerica.week11.exceptions.*;
 
 public abstract class BankAccount  {
 	
-	private static final double  MAX_COMBINED_AMOUNT= 250000;
-
+	
 	private long accountNumber;
 	
 	@Min(value = 0L, message = "Balance Lower Than 0 Exception")
 	private double balance;
 	
-	@NotNull(message = "Interest Rate Missing")
-	@Min(value = 0L)
-	@Max(value = 1)
+	@DecimalMin(value = "0.0", inclusive = false, message = "Interest must be greater than 0")
+	@DecimalMax(value = "1.0", inclusive = false, message = "Interest rate must be lower than 1")
 	private double interestRate;
 	
 	private String openedOn;
@@ -50,7 +50,6 @@ public abstract class BankAccount  {
 		return balance;
 	}
 
-//Here added the balance negative Exception that way the object isn't created. Or is it?
 	public void setBalance(double balance)  {
 			this.balance = balance;	
 	}

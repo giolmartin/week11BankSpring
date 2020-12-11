@@ -20,6 +20,8 @@ import com.meritamerica.week11.exceptions.*;
 @RestController
 @Validated
 public class MeritBankController {
+	private static final double  MAX_COMBINED_AMOUNT= 250000;
+
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping(value = "/AccountHolder")
@@ -53,27 +55,22 @@ public class MeritBankController {
 	
 	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
 												throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + checkingAccount.getBalance() > 250000) {
+		AccountHolder ah = getAccountByID(id);
+	
+		if(ah.getCombinedBalance() + checkingAccount.getBalance() > MAX_COMBINED_AMOUNT) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
 		log.info("Checking Account created and Added");
-		 MeritBank.getAccountHolders().get(id-1).addCheckingAccount(checkingAccount);
+		 ah.addCheckingAccount(checkingAccount);
 		return checkingAccount;	
 	}
 	
 	@GetMapping (value = "/AccountHolder/{id}/CheckingAccounts")
 	public List<CheckingAccount> getCheckingAccounts(@PathVariable("id") int id ) throws NoSuchResourceFoundException{
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
+		AccountHolder ah = getAccountByID(id);
 		log.info("Checking Accounts returned");
-		return MeritBank.getAccountHolders().get(id-1).getCheckingAccounts();
+		return ah.getCheckingAccounts();
 		
 	}
 	
@@ -81,27 +78,22 @@ public class MeritBankController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody @Valid SavingsAccount savingsAccount )
 										throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + savingsAccount.getBalance() > 250000) {
+		AccountHolder ah = getAccountByID(id);
+		
+		if(ah.getCombinedBalance() + savingsAccount.getBalance() > MAX_COMBINED_AMOUNT) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
 		log.info("Savings Account created and Added");
-		MeritBank.getAccountHolders().get(id-1).addSavingsAccount(savingsAccount);
+		ah.addSavingsAccount(savingsAccount);
 		return savingsAccount;	
 	}
 	
 	@GetMapping(value = "/AccountHolder/{id}/SavingsAccounts")
 	public List<SavingsAccount> getSavingsAccounts(@PathVariable("id") int id) throws NoSuchResourceFoundException{
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
+		AccountHolder ah = getAccountByID(id);
 		log.info("Savings Accounts returned");
-		return MeritBank.getAccountHolders().get(id-1).getSavingsAccounts();
+		return ah.getSavingsAccounts();
 	}
 	
 	@GetMapping(value = "/CDOfferings")
@@ -122,27 +114,21 @@ public class MeritBankController {
 	@PostMapping(value = "/AccountHolder/{id}/CDAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CDAccount addCDAccount(@PathVariable("id") int id, @RequestBody @Valid CDAccount cdAccount) throws NoSuchResourceFoundException, ExceedsCombinedLimitException {
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
-		if(MeritBank.getAccountHolders().get(id-1).getCombinedBalance() + cdAccount.getBalance() > 250000) {
+		AccountHolder ah = getAccountByID(id);
+		if(ah.getCombinedBalance() + cdAccount.getBalance() > MAX_COMBINED_AMOUNT) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
 		
-		MeritBank.getAccountHolders().get(id-1).addCDAccounts(cdAccount);
+		ah.addCDAccounts(cdAccount);
 		log.info("CDAccount created and Added");
 		return cdAccount;
 	}
 	
 	@GetMapping(value = "/AccountHolder/{id}/CDAccounts")
 	public List<CDAccount> getCDAccounts(@PathVariable ("id") int id) throws NoSuchResourceFoundException{
-		if( id > MeritBank.getAccountLength() ) {
-			log.warn("Invalid ID");
-			throw new NoSuchResourceFoundException("Invalid ID");
-		}
-		return MeritBank.getAccountHolders().get(id-1).getCdAccounts();
+		AccountHolder ah = getAccountByID(id);
+		return ah.getCdAccounts();
 	}
 	
 	

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public class CDAccount extends BankAccount{
 
-	@NotNull(message = "Term of investment Missing")
+
 	@Min(value = 1)
 	private int term;
 	
