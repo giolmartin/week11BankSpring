@@ -7,16 +7,22 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.meritamerica.week11.models.*;
+import com.meritamerica.week11.service.AccountHolderService;
+import com.meritamerica.week11.service.AccountHoldersContactDetailsService;
+import com.meritamerica.week11.service.CheckingAccountService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.meritamerica.week11.exceptions.*;
 
-
-
+@Repository
+@Transactional
 @RestController
 @Validated
 public class MeritBankController {
@@ -24,57 +30,79 @@ public class MeritBankController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	private AccountHolderService ahService;
+	
+	@Autowired
+	private AccountHoldersContactDetailsService ahContactService;
+	
+	@Autowired
+	private CheckingAccountService cService;
+	
 	@GetMapping(value = "/AccountHolder")
 	public List<AccountHolder> getAccountHolder() {
 		log.info("Returned account holders");
-		return MeritBank.getAccountHolders();
-		
+		return ahService.getAccountHolders();
 	}
 	
-	@PostMapping(value = "/AccountHolder")
+	@PostMapping(value = "/addAccountHolder")
 	@ResponseStatus(HttpStatus.CREATED)
 	public  AccountHolder addAccountHolder(@RequestBody @Valid AccountHolder accountHolder) {
-		//try catch here i think
-		MeritBank.addAccountHolder(accountHolder);
+	
 		log.info("User has added account");
-		return accountHolder;
+	//	ahContactService.addContactDetails(ahContact);
+		return ahService.addAccountHolder(accountHolder);
+	
 	}
+	
+	@PostMapping(value = "/contact/{id}")
+	public AccountHoldersContactDetails addContacts( @PathVariable int id,@RequestBody AccountHoldersContactDetails ahContact ) throws NoSuchResourceFoundException {
+		
+		return ahContactService.addContactDetails(ahContact);
+	}
+	
 	@GetMapping(value = "/AccountHolder/{id}")
 	public AccountHolder getAccountByID(@PathVariable int id) throws NoSuchResourceFoundException {
 		
-		if( id > MeritBank.getAccountLength() ) {
+		if( ahService.getAccountById(id) ==null) {
 			log.warn("Invalid ID");
 			throw new NoSuchResourceFoundException("Invalid ID");
 		}
 		log.info("Returned Account Holder");
-		return MeritBank.getAccountHolders().get(id-1);
+		return ahService.getAccountById(id);
+		}
+	
+	@DeleteMapping("/delete/{id}")
+	public String deleteProduct(@PathVariable int id) {
+		return ahService.deleteAccountHolder(id);
 	}
 	
-	@PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
+	 @PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	
 	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
 												throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
 		AccountHolder ah = getAccountByID(id);
 	
-		if(ah.getCombinedBalance() + checkingAccount.getBalance() > MAX_COMBINED_AMOUNT) {
+	/*	if(ah.getCombinedBalance() + checkingAccount.getBalance() > MAX_COMBINED_AMOUNT) {
 			log.warn("Combined Balance exceeds 250000");
 			throw new ExceedsCombinedLimitException("Combined Balance exceeds 250000");
 		}
+		*/
 		log.info("Checking Account created and Added");
 		 ah.addCheckingAccount(checkingAccount);
-		return checkingAccount;	
+		return cService.addCheckingAccount(checkingAccount);	
 	}
 	
 	@GetMapping (value = "/AccountHolder/{id}/CheckingAccounts")
 	public List<CheckingAccount> getCheckingAccounts(@PathVariable("id") int id ) throws NoSuchResourceFoundException{
 		AccountHolder ah = getAccountByID(id);
 		log.info("Checking Accounts returned");
-		return ah.getCheckingAccounts();
+		return cService.getCheckingAccounts();
 		
 	}
 	
-	@PostMapping(value = "/AccountHolder/{id}/SavingsAccounts")
+	/*@PostMapping(value = "/AccountHolder/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	public SavingsAccount addSavingsAccount(@PathVariable("id") int id, @RequestBody @Valid SavingsAccount savingsAccount )
 										throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
@@ -134,6 +162,6 @@ public class MeritBankController {
 	
 	
 	
-	
+	*/
 	
 }

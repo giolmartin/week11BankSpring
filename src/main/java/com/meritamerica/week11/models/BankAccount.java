@@ -1,21 +1,32 @@
 package com.meritamerica.week11.models;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.meritamerica.week11.exceptions.*;
-
+@MappedSuperclass
 public abstract class BankAccount  {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "account_id")
+	private int accountNumber;
 	
-	private long accountNumber;
+	private int user_id;
 	
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+
 	@Min(value = 0L, message = "Balance Lower Than 0 Exception")
 	private double balance;
 	
@@ -26,19 +37,19 @@ public abstract class BankAccount  {
 	private String openedOn;
 
 	public  BankAccount() { 
-		this.accountNumber = MeritBank.getNextAccountNumber();
+		
 		openedOn = "1234566";
 		}
 	
 	public BankAccount(double interestRate) {
-		this.accountNumber = MeritBank.getNextAccountNumber();	
+		
 		this.balance = 0 ;
 		this.interestRate=interestRate;
 		openedOn = "123123141423";
 	}
 	
 	BankAccount(double balance, double interestRate){
-		this.accountNumber = MeritBank.getNextAccountNumber();
+		
 		this.balance = balance;
 		this.interestRate = interestRate;
 		openedOn = "123123141423";
@@ -60,11 +71,11 @@ public abstract class BankAccount  {
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
 	}
-	public long getAccountNumber() {
+	public int getAccountNumber() {
 		return accountNumber;
 	}
-	public void setAccountNumber(long accountNumber) {
-		this.accountNumber = accountNumber;
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber =  accountNumber;
 	}
 	
 	public String getOpenedOn() {

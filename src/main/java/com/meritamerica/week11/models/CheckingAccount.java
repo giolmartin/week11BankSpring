@@ -1,9 +1,10 @@
 package com.meritamerica.week11.models;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "checking_accounts", catalog = "meritbankdb")
 public class CheckingAccount extends BankAccount{
 	
 	

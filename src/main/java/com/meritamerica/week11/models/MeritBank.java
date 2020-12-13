@@ -6,7 +6,7 @@ public class MeritBank {
 
 	private static List<AccountHolder> accounts = new ArrayList<AccountHolder>();
 	private static List<CDOffering> cdOfferings = new ArrayList<CDOffering>();
-	private static  long accountNumber = 1;
+	private static  int accountNumber = 1;
 	
 	public static  void addAccountHolder(AccountHolder accountHolder) 
 	{
@@ -21,12 +21,12 @@ public class MeritBank {
 		return accounts.size();
 	}
 	
-	public  static long getNextAccountNumber() 
+	public  static int getNextAccountNumber() 
 	{
 		return accountNumber++ ;
 	}
 	
-	public static long getAccountNumber() {
+	public static int getAccountNumber() {
 		return accountNumber;
 	}
 	

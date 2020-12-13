@@ -2,15 +2,32 @@ package com.meritamerica.week11.models;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
+
+@Entity
+@Table(name = "ACCOUNT_HOLDER")
 public class AccountHolder {
 
 	private static final long  MAX_COMBINED_AMOUNT= 250000;
-	private static int nextId = 1;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
 	private int id;
 
 
@@ -28,29 +45,64 @@ public class AccountHolder {
 	//@Size(min = 11, max = 11, message = "Not a valid SSN") 
 	private String ssn;
 
-	private List<CheckingAccount> checkingAccounts = new ArrayList<CheckingAccount>();
-	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
-	private List<CDAccount> cdAccounts = new ArrayList<CDAccount>();
+	@OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL )
+	@MapsId
+	@JoinColumn(name = "account_id")
+	private AccountHoldersContactDetails ahContact;
 	
-	private  int numberOfCheckingAccounts ;
-	private double checkingBalance;
-	private  int numberOfSavingsAccounts;
-	private double savingsBalance;
-	private  int numberOfCDAccounts ;
-	private double cdBalance;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "account_id")
+	private List<CheckingAccount> checkingAccounts;
 	
-	@Min(value = 0L) 
-	@Max(value = 250000, message = "Over 250k")
-	double combinedBalance;
+	//private List<CheckingAccount> checkingAccounts = new ArrayList<CheckingAccount>();
+//	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
+	//private List<CDAccount> cdAccounts = new ArrayList<CDAccount>();
+	
+	//private  int numberOfCheckingAccounts ;
+	//private double checkingBalance;
+	//private  int numberOfSavingsAccounts;
+	//private double savingsBalance;
+	//private  int numberOfCDAccounts ;
+	//private double cdBalance;
+	
+	//@Min(value = 0L) 
+	//@Max(value = 250000, message = "Over 250k")
+	//double combinedBalance;
+
+	public List<CheckingAccount> getCheckingAccounts() {
+		return checkingAccounts;
+	}
+
+
+
+	public void setCheckingAccounts(List<CheckingAccount> checkingAccounts) {
+		this.checkingAccounts = checkingAccounts;
+	}
+
+
+
+	public AccountHoldersContactDetails getAhContact() {
+		return ahContact;
+	}
+
+
+
+	public void setAhContact(AccountHoldersContactDetails ahContact) {
+		this.ahContact = ahContact;
+	}
+
+
 
 	public AccountHolder() {
-		this.id = nextId++;
+		
 		this.firstName = "";
 		this.middleName = "";
 		this.lastName = "";
 		this.ssn = "";
 	}
 
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -102,7 +154,7 @@ public class AccountHolder {
 		
 	}
 
-	public List<CheckingAccount> getCheckingAccounts() {
+	/*public List<CheckingAccount> getCheckingAccounts() {
 		return checkingAccounts;
 	}
 
@@ -171,6 +223,6 @@ public class AccountHolder {
 		this.combinedBalance	= getCheckingBalance()+ getSavingsBalance() + getCDBalance();
 		return combinedBalance;
 	}
-
+*/
 
 }
