@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import com.meritamerica.week11.models.*;
 import com.meritamerica.week11.service.AccountHolderService;
 import com.meritamerica.week11.service.AccountHoldersContactDetailsService;
+import com.meritamerica.week11.service.CDOfferingService;
 import com.meritamerica.week11.service.CheckingAccountService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.meritamerica.week11.exceptions.*;
@@ -38,6 +39,9 @@ public class MeritBankController {
 	
 	@Autowired
 	private CheckingAccountService cService;
+	
+	@Autowired
+	private CDOfferingService cdOService;
 	
 	@GetMapping(value = "/AccountHolder")
 	public List<AccountHolder> getAccountHolder() {
@@ -80,9 +84,9 @@ public class MeritBankController {
 	 @PostMapping(value = "/AccountHolder/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
 	
-	public CheckingAccount addCheckingAccount(@PathVariable("id") int id, @RequestBody @Valid CheckingAccount checkingAccount) 
+	public CheckingAccount addCheckingAccount(@PathVariable int id, @RequestBody @Valid CheckingAccount checkingAccount) 
 												throws NoSuchResourceFoundException, ExceedsCombinedLimitException{
-		AccountHolder ah = getAccountByID(id);
+		
 	
 	/*	if(ah.getCombinedBalance() + checkingAccount.getBalance() > MAX_COMBINED_AMOUNT) {
 			log.warn("Combined Balance exceeds 250000");
@@ -90,15 +94,29 @@ public class MeritBankController {
 		}
 		*/
 		log.info("Checking Account created and Added");
-		 ah.addCheckingAccount(checkingAccount);
+		
 		return cService.addCheckingAccount(checkingAccount);	
 	}
 	
-	@GetMapping (value = "/AccountHolder/{id}/CheckingAccounts")
-	public List<CheckingAccount> getCheckingAccounts(@PathVariable("id") int id ) throws NoSuchResourceFoundException{
-		AccountHolder ah = getAccountByID(id);
+	@GetMapping (value = "/checkingaccounts")
+	public List<CheckingAccount> getCheckingAccounts() throws NoSuchResourceFoundException{
+		
 		log.info("Checking Accounts returned");
 		return cService.getCheckingAccounts();
+		
+	}
+	@PostMapping(value = "/addcdo")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CDOffering addCDOffering(@RequestBody @Valid CDOffering cdOffering) {
+		
+		log.info("cdOffering created and added");
+		return cdOService.addCDOffering(cdOffering);
+	}
+	
+	@GetMapping(value = "/cdo/all")
+	public List<CDOffering> getCDOffering() {
+		log.info("Returned account holders");
+		return cdOService.getCDOfferings();
 		
 	}
 	

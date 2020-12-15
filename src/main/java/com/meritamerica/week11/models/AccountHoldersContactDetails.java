@@ -11,6 +11,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "ACCOUNT_HOLDERS_CONTACT")
@@ -27,6 +29,7 @@ public class AccountHoldersContactDetails {
 	@OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL, mappedBy = "ahContact")
 	
 	//@JoinColumn(name = "id", referencedColumnName = "user_id")
+	
 	private AccountHolder accountHolder;
 
 	
@@ -34,6 +37,7 @@ public class AccountHoldersContactDetails {
 		
 	}
 	
+	@JsonIgnore
 	public AccountHolder getAccountHolder() {
 		return accountHolder;
 	}

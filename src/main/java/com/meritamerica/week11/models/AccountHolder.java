@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "ACCOUNT_HOLDER")
@@ -45,14 +47,27 @@ public class AccountHolder {
 	//@Size(min = 11, max = 11, message = "Not a valid SSN") 
 	private String ssn;
 
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL )
 	@MapsId
 	@JoinColumn(name = "account_id")
 	private AccountHoldersContactDetails ahContact;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "account_id")
 	private List<CheckingAccount> checkingAccounts;
+	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "account_id")
+	private List<SavingsAccount> savingsAccount;
+	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id", referencedColumnName = "account_id")
+	private List<CDAccount> cdAccounts;
+	
 	
 	//private List<CheckingAccount> checkingAccounts = new ArrayList<CheckingAccount>();
 //	private List<SavingsAccount> savingsAccounts = new ArrayList<SavingsAccount>();
@@ -68,6 +83,30 @@ public class AccountHolder {
 	//@Min(value = 0L) 
 	//@Max(value = 250000, message = "Over 250k")
 	//double combinedBalance;
+
+	public List<CDAccount> getCdAccounts() {
+		return cdAccounts;
+	}
+
+
+
+	public void setCdAccounts(List<CDAccount> cdAccounts) {
+		this.cdAccounts = cdAccounts;
+	}
+
+
+
+	public List<SavingsAccount> getSavingsAccount() {
+		return savingsAccount;
+	}
+
+
+
+	public void setSavingsAccount(List<SavingsAccount> savingsAccount) {
+		this.savingsAccount = savingsAccount;
+	}
+
+
 
 	public List<CheckingAccount> getCheckingAccounts() {
 		return checkingAccounts;
@@ -143,7 +182,7 @@ public class AccountHolder {
 		this.ssn = ssn;
 	}
 
-	public CheckingAccount addCheckingAccount(double balance) {
+	/*public CheckingAccount addCheckingAccount(double balance) {
 	
 		CheckingAccount checkingAccount = new CheckingAccount(balance);
 		return checkingAccount;
@@ -154,7 +193,7 @@ public class AccountHolder {
 		
 	}
 
-	/*public List<CheckingAccount> getCheckingAccounts() {
+	public List<CheckingAccount> getCheckingAccounts() {
 		return checkingAccounts;
 	}
 

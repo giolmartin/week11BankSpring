@@ -9,23 +9,17 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @MappedSuperclass
 public abstract class BankAccount  {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "account_id")
+	//@JsonIgnore
 	private int accountNumber;
 	
-	private int user_id;
-	
-	public int getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
 
 	@Min(value = 0L, message = "Balance Lower Than 0 Exception")
 	private double balance;
